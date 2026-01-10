@@ -1,10 +1,12 @@
 services:
   - type: web
-    name: portfolio-backend
+    name: portfolio-api
     runtime: python
     rootDir: backend
-    buildCommand: poetry install --no-dev
-    startCommand: poetry run uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    buildCommand: |
+      poetry config virtualenvs.create false
+      poetry install --no-dev --no-interaction --no-ansi
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.13.4
