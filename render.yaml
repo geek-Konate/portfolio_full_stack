@@ -1,12 +1,15 @@
 services:
   - type: web
-    name: portfolio-api
-    runtime: python
-    rootDir: backend
-    buildCommand: |
-      poetry config virtualenvs.create false
-      poetry install --no-dev --no-interaction --no-ansi
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    name: portfolio-frontend
+    env: static
+    region: frankfurt
+    plan: free
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.13.4
+      - key: VITE_API_URL
+        value: https://portfolio-backend-iymh.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
