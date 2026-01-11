@@ -8,7 +8,7 @@ import {
   Alert,
 } from "@mui/material";
 import React, { useState } from "react";
-
+import { BACKEND_URL } from "../../config";
 const AddProjectForm = () => {
   const [formData, setFormData] = useState({
     title: "",
@@ -33,13 +33,10 @@ const AddProjectForm = () => {
     });
 
     try {
-      const response = await fetch(
-        "http://localhost:8000/api/upload/screenshots",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch(`${BACKEND_URL}/api/upload/screenshots`, {
+        method: "POST",
+        body: formData,
+      });
 
       if (!response.ok) {
         throw new Error("Échec de l'upload");
@@ -47,7 +44,7 @@ const AddProjectForm = () => {
 
       const data = await response.json();
       return data.urls.map((url, index) => ({
-        url: `http://localhost:8000${url}`, // IMPORTANT : ajouter l'URL complète
+        url: `${BACKEND_URL}${url}`, // IMPORTANT : ajouter l'URL complète
         name: files[index].name,
       }));
     } catch (error) {
