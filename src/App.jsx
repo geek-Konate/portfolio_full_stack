@@ -8,6 +8,15 @@ import "./App.css";
 import ProjectList from "./composents/ProjectList.jsx";
 import AddProjectForm from "./Pages1/AddProjectForm/AddProjectForm.jsx";
 import Index from "./Pages/Home/HomePage/Index.jsx";
+console.log("=== DEBUG CONFIG ===");
+console.log("Hostname:", window.location.hostname);
+console.log("is onrender:", window.location.hostname.includes("onrender.com"));
+
+import { BACKEND_URL } from "./config";
+console.log("BACKEND_URL:", BACKEND_URL);
+console.log("Type of BACKEND_URL:", typeof BACKEND_URL);
+console.log("=== END DEBUG ===");
+// ⭐⭐ FIN DU DEBUG ⭐⭐
 function App() {
   return (
     <BrowserRouter>
