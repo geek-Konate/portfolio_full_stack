@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { BACKEND_URL } from "../../config";
+
 const AddProjectForm = () => {
   const [formData, setFormData] = useState({
     title: "",
@@ -17,55 +18,97 @@ const AddProjectForm = () => {
     newTech: "",
     github_url: "",
     live_url: "",
+    image_url: "", // AJOUT: pour l'image principale
+    featured: false, // AJOUT: pour les projets en vedette
   });
 
   const [screenshots, setScreenshots] = useState([]);
   const [screenshotPreviews, setScreenshotPreviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
-  // Fonction temporaire d'upload (à remplacer par une vraie)
+  // Fonction d'upload corrigée
   const uploadScreenshots = async (files) => {
     const formData = new FormData();
 
     files.forEach((file) => {
-      formData.append("files", file);
+      formData.append("files", file); // IMPORTANT: 'files' au pluriel
     });
 
     try {
+      console.log("Upload de", files.length, "fichiers vers Supabase");
+
       const response = await fetch(`${BACKEND_URL}/api/upload/screenshots`, {
         method: "POST",
         body: formData,
+        // Pas besoin de Content-Type avec FormData, le navigateur le fait
       });
 
       if (!response.ok) {
-        throw new Error("Échec de l'upload");
+        const errorText = await response.text();
+        console.error("Réponse erreur:", errorText);
+        throw new Error(`Échec de l'upload: ${response.status}`);
       }
 
       const data = await response.json();
-      return data.urls.map((url, index) => ({
-        url: `${BACKEND_URL}${url}`, // IMPORTANT : ajouter l'URL complète
-        name: files[index].name,
-      }));
+      console.log("Réponse upload:", data);
+
+      if (!data.urls || !Array.isArray(data.urls)) {
+        throw new Error("Format de réponse invalide: urls manquantes");
+      }
+
+      return data.urls; // Retourne directement le tableau d'URLs
     } catch (error) {
       console.error("Erreur upload:", error);
       throw error;
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
+
+    // Validation
+    if (!formData.title.trim()) {
+      setError("Le titre est obligatoire");
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.description.trim()) {
+      setError("La description est obligatoire");
+      setLoading(false);
+      return;
+    }
 
     try {
-      // 1. Upload des screenshots
-      const screenshotUrls = await uploadScreenshots(screenshots);
+      let screenshotUrls = [];
 
-      // 2. Création du projet
-      await createProject({
-        ...formData,
+      // 1. Upload des screenshots si présents
+      if (screenshots.length > 0) {
+        console.log("Upload des screenshots en cours...");
+        screenshotUrls = await uploadScreenshots(screenshots);
+        console.log("Screenshots uploadés:", screenshotUrls);
+      }
+
+      // 2. Préparer les données pour l'API
+      const projectData = {
+        title: formData.title,
+        description: formData.description,
         technologies: formData.technologies,
-        screenshots: screenshotUrls.map((s) => s.url), // URLs seulement
-      });
+        screenshots: screenshotUrls, // Déjà un tableau d'URLs
+        github_url: formData.github_url || null,
+        live_url: formData.live_url || null,
+        image_url: formData.image_url || null,
+        featured: formData.featured,
+      };
+
+      console.log("Données envoyées à l'API:", projectData);
+
+      // 3. Création du projet
+      await createProject(projectData);
 
       setSuccess(true);
 
@@ -75,8 +118,8 @@ const AddProjectForm = () => {
         setSuccess(false);
       }, 2000);
     } catch (error) {
-      console.error("Erreur:", error);
-      alert("Erreur lors de la création du projet");
+      console.error("Erreur complète:", error);
+      setError(error.message || "Erreur lors de la création du projet");
     } finally {
       setLoading(false);
     }
@@ -90,9 +133,12 @@ const AddProjectForm = () => {
       newTech: "",
       github_url: "",
       live_url: "",
+      image_url: "",
+      featured: false,
     });
     setScreenshots([]);
     setScreenshotPreviews([]);
+    setError("");
 
     // Libère les URLs mémoire
     screenshotPreviews.forEach((preview) => {
@@ -103,8 +149,11 @@ const AddProjectForm = () => {
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
   };
 
   const addTech = () => {
@@ -115,7 +164,7 @@ const AddProjectForm = () => {
       setFormData((prev) => ({
         ...prev,
         technologies: [...prev.technologies, prev.newTech.trim()],
-        newTech: "", // Réinitialise le champ
+        newTech: "",
       }));
     }
   };
@@ -130,35 +179,49 @@ const AddProjectForm = () => {
   const handleScreenshotUpload = (e) => {
     const files = Array.from(e.target.files);
 
+    if (files.length === 0) return;
+
     // Validation
     const validatedFiles = files.filter((file) => {
+      // Taille max 5MB
       if (file.size > 5 * 1024 * 1024) {
         alert(`${file.name} dépasse 5MB`);
         return false;
       }
+
+      // Type MIME
+      if (!file.type.startsWith('image/')) {
+        alert(`${file.name} n'est pas une image valide`);
+        return false;
+      }
+
       return true;
     });
+
+    if (validatedFiles.length === 0) return;
 
     // Ajout aux screenshots
     setScreenshots((prev) => [...prev, ...validatedFiles]);
 
     // Création des prévisualisations
+    const newPreviews = [];
     validatedFiles.forEach((file) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setScreenshotPreviews((prev) => [...prev, reader.result]);
-      };
-      reader.onerror = () => {
-        console.error("Erreur de lecture:", file.name);
-      };
-      reader.readAsDataURL(file);
+      const previewUrl = URL.createObjectURL(file);
+      newPreviews.push(previewUrl);
     });
+
+    setScreenshotPreviews((prev) => [...prev, ...newPreviews]);
 
     // Réinitialise l'input
     e.target.value = null;
   };
 
   const removeScreenshot = (index) => {
+    // Libère l'URL blob avant suppression
+    if (screenshotPreviews[index]?.startsWith('blob:')) {
+      URL.revokeObjectURL(screenshotPreviews[index]);
+    }
+
     setScreenshots((prev) => prev.filter((_, i) => i !== index));
     setScreenshotPreviews((prev) => prev.filter((_, i) => i !== index));
   };
@@ -168,11 +231,17 @@ const AddProjectForm = () => {
       <div className="max-w-7xl mx-auto">
         <button
           onClick={() => window.history.back()}
-          className="flex items-center text-gray-600 mb-4"
+          className="flex items-center text-gray-600 mb-4 hover:text-blue-600 transition"
         >
           <ArrowBack />
           Retour
         </button>
+
+        {error && (
+          <Alert severity="error" className="mb-6">
+            {error}
+          </Alert>
+        )}
 
         {success && (
           <Alert severity="success" className="mb-6">
@@ -197,12 +266,24 @@ const AddProjectForm = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <TextField
                     fullWidth
-                    label="Nom du Projet"
+                    label="Nom du Projet *"
                     name="title"
                     value={formData.title}
                     onChange={handleInputChange}
                     required
                     variant="outlined"
+                    error={!formData.title.trim()}
+                    helperText={!formData.title.trim() ? "Ce champ est obligatoire" : ""}
+                  />
+
+                  <TextField
+                    fullWidth
+                    label="URL de l'image principale"
+                    name="image_url"
+                    value={formData.image_url}
+                    onChange={handleInputChange}
+                    variant="outlined"
+                    placeholder="https://exemple.com/image.jpg"
                   />
 
                   <TextField
@@ -212,6 +293,7 @@ const AddProjectForm = () => {
                     value={formData.github_url}
                     onChange={handleInputChange}
                     variant="outlined"
+                    placeholder="https://github.com/username/projet"
                   />
 
                   <TextField
@@ -221,6 +303,7 @@ const AddProjectForm = () => {
                     value={formData.live_url}
                     onChange={handleInputChange}
                     variant="outlined"
+                    placeholder="https://projet-en-ligne.com"
                   />
                 </div>
 
@@ -228,15 +311,31 @@ const AddProjectForm = () => {
                   <TextField
                     fullWidth
                     multiline
-                    rows={4}
-                    label="Description"
+                    rows={6}
+                    label="Description *"
                     name="description"
                     value={formData.description}
                     onChange={handleInputChange}
                     required
                     variant="outlined"
                     placeholder="Décrivez le projet en détail..."
+                    error={!formData.description.trim()}
+                    helperText={!formData.description.trim() ? "Ce champ est obligatoire" : ""}
                   />
+                </div>
+
+                <div className="mt-6 flex items-center">
+                  <input
+                    type="checkbox"
+                    id="featured"
+                    name="featured"
+                    checked={formData.featured}
+                    onChange={handleInputChange}
+                    className="h-5 w-5 text-blue-600 rounded"
+                  />
+                  <label htmlFor="featured" className="ml-2 text-gray-700">
+                    Mettre en vedette (projet principal)
+                  </label>
                 </div>
               </div>
 
@@ -284,15 +383,18 @@ const AddProjectForm = () => {
                           <img
                             src={preview}
                             alt={`Screenshot ${index + 1}`}
-                            className="w-full h-32 object-cover rounded-lg shadow"
+                            className="w-full h-32 object-cover rounded-lg shadow hover:shadow-lg transition"
                           />
                           <button
                             type="button"
-                            onClick={() => removeScreenshot(index)} // CORRECTION ICI
-                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                            onClick={() => removeScreenshot(index)}
+                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-90 hover:opacity-100 transition"
                           >
                             ×
                           </button>
+                          <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 truncate">
+                            {screenshots[index]?.name || `Screenshot ${index + 1}`}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -327,20 +429,27 @@ const AddProjectForm = () => {
                       variant="outlined"
                       onClick={addTech}
                       className="whitespace-nowrap"
+                      disabled={!formData.newTech.trim()}
                     >
                       Ajouter
                     </Button>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
-                    {formData.technologies.map((tech, index) => (
-                      <Chip
-                        key={index}
-                        label={tech}
-                        onDelete={() => removeTech(tech)}
-                        className="bg-blue-100 text-blue-800"
-                      />
-                    ))}
+                    {formData.technologies.length === 0 ? (
+                      <p className="text-gray-500 text-sm">
+                        Aucune technologie ajoutée
+                      </p>
+                    ) : (
+                      formData.technologies.map((tech, index) => (
+                        <Chip
+                          key={index}
+                          label={tech}
+                          onDelete={() => removeTech(tech)}
+                          className="bg-blue-100 text-blue-800 hover:bg-blue-200"
+                        />
+                      ))
+                    )}
                   </div>
                 </div>
               </div>
@@ -357,8 +466,8 @@ const AddProjectForm = () => {
                     fullWidth
                     variant="contained"
                     size="large"
-                    disabled={loading}
-                    className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 h-12 text-lg font-semibold"
+                    disabled={loading || !formData.title.trim() || !formData.description.trim()}
+                    className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 h-12 text-lg font-semibold disabled:opacity-50"
                     startIcon={
                       loading ? (
                         <CircularProgress size={20} color="inherit" />
@@ -375,7 +484,7 @@ const AddProjectForm = () => {
                     variant="outlined"
                     size="large"
                     onClick={resetForm}
-                    className="h-12 border-gray-300"
+                    className="h-12 border-gray-300 hover:border-red-400 hover:text-red-600"
                   >
                     Tout effacer
                   </Button>
@@ -385,7 +494,7 @@ const AddProjectForm = () => {
                     variant="text"
                     size="large"
                     onClick={() => window.history.back()}
-                    className="h-12 text-gray-600"
+                    className="h-12 text-gray-600 hover:text-gray-800"
                   >
                     Annuler
                   </Button>
