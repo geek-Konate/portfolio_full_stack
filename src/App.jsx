@@ -35,9 +35,7 @@ function App() {
             </div>
           }
         />
-        {/* AJOUTEZ CETTE ROUTE POUR REDIRIGER index.html */}
-        <Route path="/index.html" element={<Navigate to="/" replace />} />
-        {/* Optionnel: Route 404 */}
+        
         <Route
           path="*"
           element={

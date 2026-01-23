@@ -21,6 +21,10 @@ export default function ContactMe() {
 
     e.preventDefault();
     e.stopPropagation();
+    if (isSubmitting) {
+      console.log("⏳ Soumission déjà en cours...");
+      return;
+    }
     console.log("🟡 Début de la soumission");
 
     setIsSubmitting(true);
@@ -90,6 +94,7 @@ export default function ContactMe() {
       console.log("🟣 Fin de la soumission");
       setIsSubmitting(false);
     }
+    return false;
   };
 
   const handleChange = (e) => {
