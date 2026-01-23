@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { Business, Email, Person, Phone, Send } from "@mui/icons-material";
+import { useState } from "react";
 import Headling from "../../composents/Headling/Headling";
-import { Send, Email, Phone, Person, Business } from "@mui/icons-material";
 import { BACKEND_URL } from "../../config";
 
 export default function ContactMe() {
@@ -18,13 +18,18 @@ export default function ContactMe() {
   const [submitStatus, setSubmitStatus] = useState(null);
   const [errorDetails, setErrorDetails] = useState("");
   const handleSubmit = async (e) => {
+
     e.preventDefault();
+    e.stopPropagation();
+    console.log("🟡 Début de la soumission");
+
     setIsSubmitting(true);
     setSubmitStatus(null);
     setErrorDetails("");
+
     try {
-      console.log("Envoi des données:", formData);
-      // Envoie à ton backend FastAPI
+      console.log("📤 Données à envoyer:", formData);
+
       const response = await fetch(`${BACKEND_URL}/api/contact`, {
         method: "POST",
         headers: {
@@ -40,34 +45,49 @@ export default function ContactMe() {
           agree_terms: formData.agreeTerms,
         }),
       });
-      const data = await response.json();
-      console.log("Réponse reçue:", response.status);
 
-      if (response.ok && data.success) {
-        console.log("Réponse JSON:", data);
+      console.log("📥 Réponse reçue - Status:", response.status);
+      console.log("📥 Réponse reçue - Headers:", response.headers);
 
-        setSubmitStatus("success");
-        setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          phone: "",
-          topic: "",
-          message: "",
-          agreeTerms: false,
-        });
-        console.log("✅ Succès:", data.message);
-      } else {
-        const errorText = await response.text();
-        console.error("Erreur serveur:", response.status, errorText);
+      // Essayez de lire le texte d'abord pour voir ce que retourne le serveur
+      const responseText = await response.text();
+      console.log("📥 Réponse texte:", responseText);
+
+      try {
+        // Essayez de parser comme JSON
+        const data = JSON.parse(responseText);
+        console.log("📥 Réponse JSON parsée:", data);
+
+        if (response.ok && data.success) {
+          console.log("✅ Succès:", data.message);
+          setSubmitStatus("success");
+          setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phone: "",
+            topic: "",
+            message: "",
+            agreeTerms: false,
+          });
+        } else {
+          console.error("❌ Erreur serveur:", data);
+          setSubmitStatus("error");
+          setErrorDetails(data.message || `Erreur ${response.status}`);
+        }
+      } catch (jsonError) {
+        console.error("❌ Erreur de parsing JSON:", jsonError);
+        console.log("📥 Contenu brut:", responseText);
         setSubmitStatus("error");
-        setErrorDetails(`Erreur ${response.status}: ${errorText}`);
+        setErrorDetails("Le serveur a retourné une réponse invalide");
       }
+
     } catch (error) {
-      console.error("Erreur réseau:", error);
+      console.error("❌ Erreur réseau:", error);
       setSubmitStatus("error");
       setErrorDetails(`Erreur réseau: ${error.message}`);
     } finally {
+      console.log("🟣 Fin de la soumission");
       setIsSubmitting(false);
     }
   };
@@ -266,17 +286,14 @@ export default function ContactMe() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`w-full md:w-auto px-8 py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg transition-all duration-300 font-medium flex items-center justify-center gap-2 ${
-                      isSubmitting
-                        ? "opacity-70 cursor-not-allowed"
-                        : "hover:shadow-lg hover:shadow-blue-500/25"
-                    }`}
+                    className={`w-full md:w-auto px-8 py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg transition-all duration-300 font-medium flex items-center justify-center gap-2 ${isSubmitting ? "opacity-70 cursor-not-allowed" : "hover:shadow-lg hover:shadow-blue-500/25"
+                      }`}
                   >
                     {isSubmitting ? (
-                      <>
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span className="flex items-center gap-2">
+                        <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                         Envoi en cours...
-                      </>
+                      </span>
                     ) : (
                       <>
                         <Send />
@@ -284,6 +301,7 @@ export default function ContactMe() {
                       </>
                     )}
                   </button>
+
                 </div>
               </form>
             </div>
