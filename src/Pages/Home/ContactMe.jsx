@@ -121,23 +121,7 @@ export default function ContactMe() {
           {/* Formulaire */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-lg p-8 md:p-10">
-              {submitStatus === "success" && (
-                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <p className="text-green-700 font-medium">
-                    ✅ Message envoyé avec succès ! Je vous répondrai très
-                    rapidement.
-                  </p>
-                </div>
-              )}
 
-              {submitStatus === "error" && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                  <p className="text-red-700 font-medium">
-                    ❌ Une erreur est survenue. Veuillez réessayer ou me
-                    contacter directement par email.
-                  </p>
-                </div>
-              )}
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Nom et Prénom */}
@@ -306,7 +290,23 @@ export default function ContactMe() {
                       </>
                     )}
                   </button>
+                  {submitStatus === "success" && (
+                    <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                      <p className="text-green-700 font-medium">
+                        ✅ Message envoyé avec succès ! Je vous répondrai très
+                        rapidement.
+                      </p>
+                    </div>
+                  )}
 
+                  {submitStatus === "error" && (
+                    <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                      <p className="text-red-700 font-medium">
+                        ❌ Une erreur est survenue. Veuillez réessayer ou me
+                        contacter directement par email.
+                      </p>
+                    </div>
+                  )}
                 </div>
               </form>
             </div>
@@ -344,21 +344,7 @@ export default function ContactMe() {
             </div>
 
             {/* Card Response Time */}
-            <div className="bg-white rounded-2xl shadow p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Temps de réponse
-              </h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Réponse moyenne</span>
-                  <span className="font-bold text-green-600">24h</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Disponibilité</span>
-                  <span className="font-bold text-blue-600">Lun - Ven</span>
-                </div>
-              </div>
-            </div>
+
 
             {/* Card Alternative */}
             <div className="bg-gray-50 rounded-2xl p-6">
@@ -366,7 +352,7 @@ export default function ContactMe() {
                 Autres moyens de contact
               </h3>
               <p className="text-gray-600 text-sm mb-4">
-                Vous préférez LinkedIn ou GitHub ?
+                LinkedIn ou GitHub ?
               </p>
               <div className="flex gap-3">
                 <a

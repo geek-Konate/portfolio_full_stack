@@ -4,14 +4,14 @@ import { Download, ArrowRight, Code, Terminal } from "@mui/icons-material";
 
 export default function HeroSection() {
   return (
-    <section className="hero-section relative overflow-hidden pt-20 md:pt-20 pb-12 md:pb-24">
+    <section className="hero-section relative overflow-hidden pt-20  pb-12 md:py-36">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 -z-10"></div>
 
       {/* Geometric shapes - Modifié pour mobile */}
       <div className="absolute top-10 left-5 w-48 h-48 md:w-72 md:h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse"></div>
       <div className="absolute bottom-10 right-5 w-48 h-48 md:w-80 md:h-80 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse delay-1000"></div>
 
-      <div className="container mx-auto px-4 sm:px-6">
+      <div className="container ">
         <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-1 gap-8 md:gap-12 items-center">
           {/* Left - Content */}
           <div className="text-center lg:text-left order-2 lg:order-1">

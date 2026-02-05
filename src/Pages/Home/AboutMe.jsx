@@ -5,7 +5,7 @@ import { Code, School, Work, Rocket } from "@mui/icons-material";
 export default function AboutMe() {
   return (
     <section className="about w-full py-8 md:py-12 bg-gradient-to-b from-white to-gray-50">
-      <div className="container mx-auto px-2 md:px-4 lg:px-8">
+      <div className="container  md:px-4 lg:px-8">
         <div className="text-center mb-12">
           <Headling hightlight="À Propos" />
           <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
@@ -14,7 +14,7 @@ export default function AboutMe() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           {/* Photo / Illustration */}
           <div className="relative">
             <div className="relative z-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-1 shadow-2xl transform hover:scale-[1.02] transition duration-300">
