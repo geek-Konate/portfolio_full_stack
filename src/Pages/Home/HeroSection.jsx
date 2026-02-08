@@ -43,20 +43,13 @@ export default function HeroSection() {
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap justify-center lg:justify-start gap-2 md:gap-3 mb-8 md:mb-10">
-              <a
-                href="/cv.pdf"
-                className="px-4 py-2 md:px-5 md:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium flex items-center gap-2 text-sm md:text-base"
-                download
-              >
-                <Download fontSize="small" />
-                Télécharger CV
-              </a>
+
 
               <a
                 href="#portfolio"
                 className="px-4 py-2 md:px-5 md:py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 font-medium text-sm md:text-base"
               >
-                Voir mes projets
+                Voir mon projets
               </a>
 
               <a
@@ -72,7 +65,7 @@ export default function HeroSection() {
           <div className="relative flex justify-center lg:justify-end order-1 lg:order-2 mb-8 lg:mb-0">
             <div className="relative">
               {/* Main image */}
-              <div className="relative z-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full p-1 sm:p-2 shadow-xl md:shadow-2xl w-64 h-64 sm:w-80 sm:h-80 md:w-[400px] md:h-[400px] mx-auto">
+              <div className="relative z-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full p-1 sm:p-2 shadow-xl md:shadow-2xl w-64 h-64 sm:w-80 sm:h-80 md:w-[500px] md:h-[500px] mx-auto">
                 <img
                   src="/img/20250807_171450.jpg"
                   alt="Mamadou Konaté - Développeur Full-Stack"
@@ -90,7 +83,7 @@ export default function HeroSection() {
               <div className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 w-14 h-14 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-blue-400 rounded-full opacity-20 animate-pulse"></div>
 
               {/* Experience badge */}
-              <div className="absolute -bottom-14 md:-bottom-14 left-1/2 transform -translate-x-1/2 bg-white rounded-lg md:rounded-xl shadow-md md:shadow-lg p-2 md:p-4 flex items-center gap-2 md:gap-3">
+              <div className=" absolute -bottom-14 md:-bottom-15 left-1/2 transform -translate-x-1/2 bg-white rounded-lg md:rounded-xl shadow-md md:shadow-lg p-2 md:p-4 flex items-center gap-2 md:gap-3 ">
                 <div className="w-8 h-8 md:w-12 md:h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
                   <Code className="text-white text-sm md:text-base" />
                 </div>

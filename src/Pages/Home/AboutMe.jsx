@@ -95,14 +95,9 @@ export default function AboutMe() {
                 href="https://github.com/geek-Konate"
                 className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
               >
-                Voir mes projets
+                Voir mon Githup
               </a>
-              <a
-                href="/contact"
-                className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:border-blue-600 hover:text-blue-600 transition font-medium"
-              >
-                Me contacter
-              </a>
+
             </div>
           </div>
         </div>

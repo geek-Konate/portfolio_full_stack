@@ -112,8 +112,7 @@ export default function ContactMe() {
         <div className="text-center mb-12">
           <Headling hightlight="Contact" />
           <p className="text-gray-600 mt-4 max-w-2xl mx-auto text-lg">
-            Vous avez un projet ? Une question ? N'hésitez pas à me contacter.
-            Je réponds généralement sous 24 heures.
+            Vous avez un projet ? Une question ? Travaillons ensemble.
           </p>
         </div>
 
