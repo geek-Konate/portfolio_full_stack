@@ -1,6 +1,6 @@
-import React from "react";
-import "@fontsource/roboto";
-import { Download, ArrowRight, Code, Terminal } from "@mui/icons-material";
+import React from 'react';
+import '@fontsource/roboto';
+import { Download, ArrowRight, Code, Terminal } from '@mui/icons-material';
 
 export default function HeroSection() {
   return (
@@ -19,15 +19,13 @@ export default function HeroSection() {
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-100 to-purple-100 px-3 py-1 md:px-4 md:py-2 rounded-full mb-4 md:mb-6 mt-3 md:mt-1">
               <Terminal className="text-blue-600" fontSize="small" />
               <span className="text-xs md:text-sm font-medium text-blue-700">
-                Développeur Full-Stack Passionné
+                Développeur Full-Stack
               </span>
             </div>
 
             {/* Main Title */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
-              <span className="block text-xl sm:text-2xl md:text-3xl">
-                Bonjour, je suis
-              </span>
+              <span className="block text-xl sm:text-2xl md:text-3xl">Bonjour, je suis</span>
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
                 Mamadou Konaté
               </span>
@@ -35,21 +33,19 @@ export default function HeroSection() {
 
             {/* Description */}
             <p className="text-gray-600 mb-6 md:mb-8 text-base sm:text-lg md:text-xl leading-relaxed max-w-xl lg:mx-0">
-              Spécialisé dans le développement d'applications full-stack
-              performantes. Je combine une expertise technique pointue avec une
-              approche centrée sur l'expérience utilisateur pour créer des
-              solutions digitales impactantes.
+              Développeur full stack orienté sécurité, je conçois des applications web performantes
+              et robustes en intégrant les principes DevSecOps dès la phase de développement.
+              J’allie rigueur technique et expérience utilisateur pour proposer des solutions
+              fiables et évolutives.
             </p>
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap justify-center lg:justify-start gap-2 md:gap-3 mb-8 md:mb-10">
-
-
               <a
                 href="#portfolio"
                 className="px-4 py-2 md:px-5 md:py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 font-medium text-sm md:text-base"
               >
-                Voir mon projets
+                Voir mes projets
               </a>
 
               <a
@@ -72,8 +68,7 @@ export default function HeroSection() {
                   className="w-full h-full object-cover rounded-full"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src =
-                      "https://via.placeholder.com/400x400/3B82F6/FFFFFF?text=M.K";
+                    e.target.src = 'https://via.placeholder.com/400x400/3B82F6/FFFFFF?text=M.K';
                   }}
                 />
               </div>
@@ -88,12 +83,8 @@ export default function HeroSection() {
                   <Code className="text-white text-sm md:text-base" />
                 </div>
                 <div>
-                  <div className="text-lg md:text-2xl font-bold text-gray-900">
-                    2+
-                  </div>
-                  <div className="text-xs md:text-sm text-gray-600">
-                    Années d'XP
-                  </div>
+                  <div className="text-lg md:text-2xl font-bold text-gray-900">2+</div>
+                  <div className="text-xs md:text-sm text-gray-600">Années d'XP</div>
                 </div>
               </div>
             </div>

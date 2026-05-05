@@ -1,6 +1,6 @@
-import axios from "axios";
-import { BACKEND_URL } from "../config";
-const API_BASE_URL = BACKEND_URL + "/api";
+import axios from 'axios';
+import { BACKEND_URL } from '../config';
+const API_BASE_URL = BACKEND_URL + '/api';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -9,14 +9,12 @@ export const api = axios.create({
 
 // reccupreation de tous les projects
 export const getProjects = async () => {
-  const response = await api.get("/projects");
+  const response = await api.get('/projects');
   return response.data;
 };
-
 // créer un projects
-
 export const createProject = async (projectData) => {
-  const response = await api.post("/projects", projectData);
+  const response = await api.post('/projects', projectData);
   return response.data;
 };
 // supprimer un project
@@ -39,37 +37,33 @@ export const getProject = async (id) => {
 export const addScreenshotsToProject = async (projectId, files) => {
   const formData = new FormData();
   files.forEach((file) => {
-    formData.append("new_files", file);
+    formData.append('new_files', file);
   });
-  const response = await api.patch(
-    `/projects/${projectId}/screenshots`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await api.patch(`/projects/${projectId}/screenshots`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 export const uploadScreenshots = async (files) => {
   const formData = new FormData();
 
   files.forEach((file) => {
-    formData.append("files", file); // Nom important: 'files' (pluriel)
+    formData.append('files', file); // Nom important: 'files' (pluriel)
   });
 
   try {
-    const response = await api.post("/upload/screenshots", formData, {
+    const response = await api.post('/upload/screenshots', formData, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
       },
     });
 
     // Retourne seulement les URLs
     return response.data.urls;
   } catch (error) {
-    console.error("Upload error:", error.response?.data || error.message);
+    console.error('Upload error:', error.response?.data || error.message);
     throw error;
   }
 };

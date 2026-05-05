@@ -1,6 +1,6 @@
-import React from "react";
-import Headling from "../../composents/Headling/Headling";
-import { Code, School, Work, Rocket } from "@mui/icons-material";
+import React from 'react';
+import Headling from '../../composents/Headling/Headling';
+import { Code, School, Work, Rocket } from '@mui/icons-material';
 
 export default function AboutMe() {
   return (
@@ -9,8 +9,9 @@ export default function AboutMe() {
         <div className="text-center mb-12">
           <Headling hightlight="À Propos" />
           <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
-            Passionné par la création de solutions numériques qui allient
-            esthétique, performance et expérience utilisateur.
+            Passionné par la conception de solutions web fiables et sécurisées, je développe des
+            applications modernes en alliant performance, expérience utilisateur et bonnes pratiques
+            de sécurité.
           </p>
         </div>
 
@@ -32,24 +33,18 @@ export default function AboutMe() {
 
           {/* Contenu */}
           <div className="space-y-6">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
-              Je suis <span className="text-blue-600">Mamadou</span>
-            </h1>
-
             <p className="text-gray-700 text-lg leading-relaxed">
-              Développeur Full-Stack passionné par la création d'applications
-              web modernes. Je combine{" "}
-              <strong className="text-blue-600">React</strong> pour le frontend
-              et
-              <strong className="text-green-600"> Python/FastAPI</strong> pour
-              le backend afin de construire des solutions robustes et
-              évolutives.
+              Passionné par la création d'applications web et mobile modernes. Je combine{' '}
+              <strong className="text-blue-600">React & Flutter</strong> pour le frontend et
+              <strong className="text-green-600"> Python/FastAPI</strong> pour le backend afin de
+              construire des solutions robustes et évolutives.
             </p>
 
             <p className="text-gray-700 text-lg leading-relaxed">
-              Mon parcours m'a permis de maîtriser l'ensemble du cycle de
-              développement, de l'idéation au déploiement, en passant par le
-              design d'interface et l'optimisation des performances.
+              Mon parcours m’a permis de couvrir l’ensemble du cycle de développement, de la
+              conception à la mise en production. Je m’intéresse particulièrement à la qualité du
+              code, à l’optimisation des performances et à la sécurisation des applications face aux
+              vulnérabilités courantes.
             </p>
 
             {/* Stats */}
@@ -59,7 +54,7 @@ export default function AboutMe() {
                 <div className="text-sm text-gray-600">Années d'XP</div>
               </div>
               <div className="bg-white p-4 rounded-xl shadow-sm text-center">
-                <div className="text-2xl font-bold text-green-600">20+</div>
+                <div className="text-2xl font-bold text-green-600">10+</div>
                 <div className="text-sm text-gray-600">Projets</div>
               </div>
               {/* <div className="bg-white p-4 rounded-xl shadow-sm text-center">
@@ -77,13 +72,11 @@ export default function AboutMe() {
               <div className="flex items-start gap-4">
                 <Rocket className="text-blue-600 text-3xl" />
                 <div>
-                  <h3 className="font-bold text-gray-900 text-lg mb-2">
-                    Ma philosophie
-                  </h3>
+                  <h3 className="font-bold text-gray-900 text-lg mb-2">Ma philosophie</h3>
                   <p className="text-gray-700">
-                    "Le code n'est pas seulement une fonctionnalité, c'est une
-                    expérience. Chaque ligne doit raconter une histoire
-                    d'efficacité, de maintenabilité et d'élégance."
+                    "Un bon logiciel ne se limite pas à fonctionner : il doit être fiable, sécurisé
+                    et maintenable. Chaque décision technique doit contribuer à la qualité et à la
+                    pérennité du système."
                   </p>
                 </div>
               </div>
@@ -95,9 +88,8 @@ export default function AboutMe() {
                 href="https://github.com/geek-Konate"
                 className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
               >
-                Voir mon Githup
+                Voir mon GitHub
               </a>
-
             </div>
           </div>
         </div>
