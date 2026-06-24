@@ -1,6 +1,5 @@
-import React from 'react';
 import '@fontsource/roboto';
-import { Download, ArrowRight, Code, Terminal } from '@mui/icons-material';
+import { ArrowRight, Code, Terminal } from '@mui/icons-material';
 
 export default function HeroSection() {
   return (
